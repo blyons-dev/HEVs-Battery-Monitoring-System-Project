@@ -1,0 +1,31 @@
+clear;
+clc;
+maxv = 12.6;
+normv = 11.1;
+Wh = 24.42;
+mAh = 2200;
+Ah = mAh / 1000;
+C = 50;
+v = input("Enter the current voltage: ");
+percent = v/maxv * 100;
+fprintf('Battery Percentage: %.2f%%\n', percent);
+w = 0.05;
+C = pi*w;
+f = 200/60;
+vel = C * f;
+Imotor = 0.4;
+Irock = 1.5;
+n = 0.9;
+I = 4*Imotor + Irock;
+P = 5.2 * I;
+tfull = (normv * C) / P;
+SOC = max(0, min(1, (v - normv) / (maxv - normv)));
+d = vel * 3600 * tfull * SOC;
+kmd = d / 1000;
+miled = d / 1609.34;
+fprintf('Distance Left: %.2f meters, %.4f kilometers, or %.4f miles\n', d, kmd, miled);
+if SOC < 0.3
+   disp('Warning! Battery levels are low. Recharge immediately!');
+elseif SOC < 0.1
+    disp('Danger! Battery levels are critically low. Recharge NOW!');
+end
